@@ -13,13 +13,13 @@ class UserTemplateTasks < Volt::Task
   end
   
   def setup_and_send_password_reset(user, email)
-    generate_token(user, :password_reset_token, true)
+    generate_token(user, :password_reset_token)
     user.password_reset_sent_at = Time.zone.now
     user.save
     Mailer.deliver('user_templates/mailers/forgot', {to: email, name: user._name})
   end
   
-  def generate_token(user, column, unique=true)
+  def generate_token(user, column)
     user[column] = SecureRandom.urlsafe_base64
   end
 end
